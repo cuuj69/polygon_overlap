@@ -5,7 +5,7 @@ This Python script detects overlaps between polygons stored in a MongoDB collect
 ## Setup Instructions
 
 1. Clone this repository to your local machine.
-git clone https://github.com/cuuj69/polygon-overlap.git
+git clone https://github.com/cuuj69/polygon_overlap.git
 
 2. Navigate to the project directory.
 cd polygon-overlap
