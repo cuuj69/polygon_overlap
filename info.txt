@@ -1,0 +1,7 @@
+-[]JSON
+  -{}0
+    -{}q461geo
+      -[]coordinates
+        -[]0
+          so this contain cordinates like 0: -2.68414652 and 1: 5.61414093999999....
+
