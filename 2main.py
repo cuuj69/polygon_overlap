@@ -139,7 +139,7 @@ def main():
     # Print total overlaps
     print("Total Overlaps:", total_overlaps)
 
-# Entry point of the script
+
 if __name__ == "__main__":
     main()
 
