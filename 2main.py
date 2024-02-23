@@ -14,37 +14,38 @@ load_dotenv()
 
 mongodb_uri = os.getenv('MONGODB_URI')
 
-# Initialize logger
+#logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Function to parse polygon records from GeoJSON data
+#parse polygon records from sample.json data
 def parse_polygon_records(record, field_names):
     polygons = []
     for field_name in field_names:
         try:
             geojson_data = record.get(field_name, [])
             if geojson_data:
-                # Construct polygon from GeoJSON data
+                # construct polygon
                 polygon = Polygon([tuple(coord) for coord in geojson_data[0]])
                 polygons.append(polygon)
         except Exception as e:
-            # Log error when parsing GeoJSON data
+            
             logger.error(f"Error parsing GeoJSON data for record {record['_id']}: {e}")
            
     return polygons
 
-# Function to process chunks of records
+# chunks
 def process_chunk(args):
     chunk, field_names, overlap_threshold = args
     overlaps = []
 
-    # Connect to MongoDB
+    
     client = MongoClient(mongodb_uri)
     db = client['polygon_overlap']
     collection = db['polygons']
 
-    # Iterate over records in the chunk
+    
     for record1 in chunk:
         polygons1 = parse_polygon_records(record1, field_names)
         for record2 in collection.find():
@@ -52,7 +53,7 @@ def process_chunk(args):
             for polygon1 in polygons1:
                 for polygon2 in polygons2:
                     try:
-                        # Perform geometric operations
+                        # geometric operations
                         if polygon1.intersects(polygon2):
                             intersection_area = polygon1.intersection(polygon2).area
                             total_area = polygon1.area + polygon2.area - intersection_area
@@ -60,7 +61,7 @@ def process_chunk(args):
                             if overlap_percentage >= overlap_threshold:
                                 overlaps.append((record1['_id'], record2['_id']))
 
-                                # Update collection with overlap log
+                                # update collection with overlap log
                                 log_info = {
                                     "record_id": record1['_id'],
                                     "overlap_with": record2['_id'],
@@ -69,11 +70,11 @@ def process_chunk(args):
                                 record1['log'] = log_info
                                 collection.update_one({'_id': record1['_id']}, {'$set': {'log': log_info}})
                     except (shapely.errors.TopologicalError, shapely.errors.GEOSException ) as e:
-                        # Log error when processing polygons
+                        
                         logger.error(f"TopologyException: {e}")
-                        continue  # Skip to the next iteration if error occurs
+                        continue #skip
 
-    # Close MongoDB connection
+    
     client.close()
 
     return overlaps
