@@ -1,3 +1,4 @@
 *.json
 myvenv
 .env
+/venv
