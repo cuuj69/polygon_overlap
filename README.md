@@ -38,6 +38,8 @@ The script will output progress information to the console as it processes recor
 - **Elapsed Time**: Time elapsed since the script started.
 - **Estimated Time Remaining**: Estimated time remaining based on the current processing speed.
 
+Additionally, any errors encountered during processing, such as self-intersecting polygons or invalid records, will be logged to an `error_log.txt` file. Each entry in the error log contains the record ID and a message describing the error.
+
 The script also updates the MongoDB database with overlap information. Each record in the collection will have a `log` field containing details about overlaps detected, including the record ID, ID of the overlapping record, and the overlap percentage.
 
 "log": {
