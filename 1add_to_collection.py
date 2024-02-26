@@ -30,13 +30,15 @@ def upload_json_to_mongodb(json_file, database_name, collection_name, num_record
             
             #insert record into collection with field name(incremented)
             collection.insert_one({str(field_count): coordinates})
-            field_count += 1  
+            field_count += 1 
+             
+    print(f"Successfully added {field_count} Number of Items")
         
 
 if __name__ == "__main__":
     json_file = 'sample_data.json'
     database_name = 'polygon_overlap'
     collection_name = 'polygons'
-    num_of_records = 200 # could be more
+    num_of_records = 20 # could be more
     
     upload_json_to_mongodb(json_file, database_name, collection_name, num_of_records)
